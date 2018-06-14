@@ -1,0 +1,94 @@
+Total event coverage: 100.0%
+Machine: NetworkEnvironment
+***************
+Machine event coverage: 100%
+
+	State: Init is uncovered
+
+Machine: SmartApp
+***************
+Machine event coverage: 100.0%
+
+	State: init is uncovered
+
+	State: waitSchedule
+		State event coverage: 100.0%
+		Events Received: End 
+		Events Sent: TimerStart 
+		Next States: schedulerCheck 
+
+	State: schedulerCheck
+		State event coverage: 100.0%
+		Events Received: IsnotStorm IsStorm 
+		Events Sent: RequestWeather 
+		Previous States: waitSchedule 
+		Next States: IsnotStormState IsStormState 
+
+	State: IsStormState
+		State event coverage: 100.0%
+		Events Received: SensorClosed SensorOpen 
+		Events Sent: RequestSensorState 
+		Previous States: schedulerCheck 
+		Next States: DoorSafe SendSms 
+
+	State: IsnotStormState
+		State event coverage: 100%
+		Previous States: schedulerCheck 
+
+	State: SendSms
+		State event coverage: 100%
+		Events Sent: PhoneSms 
+		Previous States: IsStormState 
+
+	State: DoorSafe
+		State event coverage: 100%
+		Previous States: IsStormState 
+
+Machine: ContactSensor
+***************
+Machine event coverage: 100.0%
+
+	State: Init is uncovered
+
+	State: Active
+		State event coverage: 100.0%
+		Events Received: RequestSensorState 
+		Events Sent: SensorClosed SensorOpen 
+
+Machine: Phone
+***************
+Machine event coverage: 100.0%
+
+	State: Init is uncovered
+
+	State: Active
+		State event coverage: 100.0%
+		Events Received: PhoneSms 
+		Next States: GetSms 
+
+	State: GetSms
+		State event coverage: 100%
+		Previous States: Active 
+
+Machine: VirtualScheduler
+***************
+Machine event coverage: 100.0%
+
+	State: Init is uncovered
+
+	State: Active
+		State event coverage: 100.0%
+		Events Received: TimerStart 
+		Events Sent: End 
+
+Machine: SmartThingsPlatform
+***************
+Machine event coverage: 100.0%
+
+	State: Init is uncovered
+
+	State: Active
+		State event coverage: 100.0%
+		Events Received: RequestWeather 
+		Events Sent: IsnotStorm IsStorm 
+

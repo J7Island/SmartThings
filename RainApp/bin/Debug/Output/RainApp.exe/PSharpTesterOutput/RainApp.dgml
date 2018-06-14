@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<DirectedGraph xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+    <Node Id="NetworkEnvironment" Group="Expanded" />
+    <Node Id="SmartApp" Group="Expanded" />
+    <Node Id="ContactSensor" Group="Expanded" />
+    <Node Id="Phone" Group="Expanded" />
+    <Node Id="VirtualScheduler" Group="Expanded" />
+    <Node Id="SmartThingsPlatform" Group="Expanded" />
+    <Node Id="Init::NetworkEnvironment" Label="Init" />
+    <Node Id="init::SmartApp" Label="init" />
+    <Node Id="waitSchedule::SmartApp" Label="waitSchedule" />
+    <Node Id="schedulerCheck::SmartApp" Label="schedulerCheck" />
+    <Node Id="IsStormState::SmartApp" Label="IsStormState" />
+    <Node Id="IsnotStormState::SmartApp" Label="IsnotStormState" />
+    <Node Id="SendSms::SmartApp" Label="SendSms" />
+    <Node Id="DoorSafe::SmartApp" Label="DoorSafe" />
+    <Node Id="Init::ContactSensor" Label="Init" />
+    <Node Id="Active::ContactSensor" Label="Active" />
+    <Node Id="Init::Phone" Label="Init" />
+    <Node Id="Active::Phone" Label="Active" />
+    <Node Id="GetSms::Phone" Label="GetSms" />
+    <Node Id="Init::VirtualScheduler" Label="Init" />
+    <Node Id="Active::VirtualScheduler" Label="Active" />
+    <Node Id="Init::SmartThingsPlatform" Label="Init" />
+    <Node Id="Active::SmartThingsPlatform" Label="Active" />
+  </Nodes>
+  <Links>
+    <Link Source="NetworkEnvironment" Target="Init::NetworkEnvironment" Category="Contains" />
+    <Link Source="SmartApp" Target="init::SmartApp" Category="Contains" />
+    <Link Source="SmartApp" Target="waitSchedule::SmartApp" Category="Contains" />
+    <Link Source="SmartApp" Target="schedulerCheck::SmartApp" Category="Contains" />
+    <Link Source="SmartApp" Target="IsStormState::SmartApp" Category="Contains" />
+    <Link Source="SmartApp" Target="IsnotStormState::SmartApp" Category="Contains" />
+    <Link Source="SmartApp" Target="SendSms::SmartApp" Category="Contains" />
+    <Link Source="SmartApp" Target="DoorSafe::SmartApp" Category="Contains" />
+    <Link Source="ContactSensor" Target="Init::ContactSensor" Category="Contains" />
+    <Link Source="ContactSensor" Target="Active::ContactSensor" Category="Contains" />
+    <Link Source="Phone" Target="Init::Phone" Category="Contains" />
+    <Link Source="Phone" Target="Active::Phone" Category="Contains" />
+    <Link Source="Phone" Target="GetSms::Phone" Category="Contains" />
+    <Link Source="VirtualScheduler" Target="Init::VirtualScheduler" Category="Contains" />
+    <Link Source="VirtualScheduler" Target="Active::VirtualScheduler" Category="Contains" />
+    <Link Source="SmartThingsPlatform" Target="Init::SmartThingsPlatform" Category="Contains" />
+    <Link Source="SmartThingsPlatform" Target="Active::SmartThingsPlatform" Category="Contains" />
+    <Link Source="waitSchedule::SmartApp" Target="Active::VirtualScheduler" Label="TimerStart" />
+    <Link Source="Active::VirtualScheduler" Target="waitSchedule::SmartApp" Label="End" />
+    <Link Source="waitSchedule::SmartApp" Target="schedulerCheck::SmartApp" Label="End" />
+    <Link Source="schedulerCheck::SmartApp" Target="Active::SmartThingsPlatform" Label="RequestWeather" />
+    <Link Source="Active::SmartThingsPlatform" Target="schedulerCheck::SmartApp" Label="IsnotStorm" />
+    <Link Source="schedulerCheck::SmartApp" Target="IsnotStormState::SmartApp" Label="IsnotStorm" />
+    <Link Source="Active::SmartThingsPlatform" Target="schedulerCheck::SmartApp" Label="IsStorm" Index="1" />
+    <Link Source="schedulerCheck::SmartApp" Target="IsStormState::SmartApp" Label="IsStorm" />
+    <Link Source="IsStormState::SmartApp" Target="Active::ContactSensor" Label="RequestSensorState" />
+    <Link Source="Active::ContactSensor" Target="IsStormState::SmartApp" Label="SensorClosed" />
+    <Link Source="IsStormState::SmartApp" Target="DoorSafe::SmartApp" Label="SensorClosed" />
+    <Link Source="Active::ContactSensor" Target="IsStormState::SmartApp" Label="SensorOpen" Index="1" />
+    <Link Source="IsStormState::SmartApp" Target="SendSms::SmartApp" Label="SensorOpen" />
+    <Link Source="SendSms::SmartApp" Target="Active::Phone" Label="PhoneSms" />
+    <Link Source="Active::Phone" Target="GetSms::Phone" Label="PhoneSms" />
+  </Links>
+</DirectedGraph>

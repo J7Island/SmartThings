@@ -1,0 +1,77 @@
+﻿namespace RainApp {
+	internal machine SmartApp
+	{
+		machine contacts;
+		machine phoneNumber;
+		machine timer;
+		machine netEnv;
+		machine stPlatform;
+
+		internal event Config(netEnvID: machine);
+		internal event RequestWeather(appID: machine);
+		internal event RequestSensorState(appID: machine);
+		internal event PhoneSms;
+		internal event TimerStart;
+
+		start state init
+		{
+			//According to Preferences, create corresponding machines;
+			entry
+			{
+				netEnv = (trigger as Config).netEnvID;
+				contacts = create(ContactSensor, ContactSensor.Config, this);
+				phoneNumber = create(Phone, Phone.Config, this);
+				timer = create(VirtualScheduler, VirtualScheduler.Config, this);
+				stPlatform = create(SmartThingsPlatform, SmartThingsPlatform.Config, this);
+				jump(waitSchedule);
+			
+			}
+		}
+
+		state waitSchedule
+		{
+			entry
+			{
+				send(timer, TimerStart);
+			}
+			on VirtualScheduler.End goto schedulerCheck;
+		}
+
+		state schedulerCheck
+		{
+			entry
+			{
+				send(stPlatform, RequestWeather, this);
+			}
+			on SmartThingsPlatform.IsStorm goto IsStormState;
+			on SmartThingsPlatform.IsnotStorm goto IsnotStormState;
+		}
+
+		state IsStormState 
+		{
+			entry
+			{
+				send(contacts, RequestSensorState, this);
+				
+			}
+			on ContactSensor.SensorClosed goto DoorSafe;
+			on ContactSensor.SensorOpen goto SendSms;
+		}
+
+		state IsnotStormState
+		{
+		}
+
+		state SendSms
+		{
+			entry
+			{
+				send(this.phoneNumber, PhoneSms);
+			}
+		}
+
+		state DoorSafe
+		{
+		}
+	}
+}

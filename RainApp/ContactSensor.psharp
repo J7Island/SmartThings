@@ -1,0 +1,41 @@
+﻿using System.Diagnostics;
+
+namespace RainApp
+{
+	internal machine ContactSensor
+	{
+		internal event Config(appID: machine);
+		internal event SensorOpen;
+		internal event SensorClosed;
+
+		machine smartApp;
+
+		start state Init
+		{
+			entry
+			{
+				this.smartApp = (trigger as Config).appID;
+				jump(Active);
+			}	
+		}
+
+		state Active
+		{
+			on SmartApp.RequestSensorState do replySensorState;
+		}
+
+		void replySensorState()
+		{
+			System.Random r = new System.Random();
+			int rnd = r.Next(0, 2);
+			bool flag = (rnd == 0);
+
+			if (flag) {
+				send(this.smartApp, SensorOpen);
+			} else {
+				send(this.smartApp, SensorClosed);
+			}
+				
+		}
+	}
+}

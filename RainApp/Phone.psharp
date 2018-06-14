@@ -1,0 +1,28 @@
+﻿namespace RainApp
+{
+	internal machine Phone
+	{
+		internal event Config(appID: machine);
+
+		machine smartApp;
+
+		start state Init
+		{
+			entry
+			{
+				this.smartApp = (trigger as Config).appID;
+				jump(Active);
+			}	
+		}
+
+		state Active
+		{
+			on SmartApp.PhoneSms goto GetSms;
+		}
+
+		state GetSms
+		{
+			
+		}
+	}
+}	

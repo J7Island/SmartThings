@@ -1,0 +1,15 @@
+﻿namespace RainApp {
+	//This machine acts as a test hardness. It models a network environment,
+	internal machine NetworkEnvironment
+	{
+		start state Init
+		{
+			entry
+			{
+				var smartApp = create(SmartApp, SmartApp.Config, this);
+			}
+			
+
+		}
+	}
+}

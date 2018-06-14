@@ -1,0 +1,34 @@
+﻿namespace RainApp
+{
+	internal machine VirtualScheduler
+	{
+		internal event Config(appID: machine);
+		internal event End;
+
+		machine smartApp;
+
+		start state Init
+		{
+			entry
+			{
+				this.smartApp = (trigger as Config).appID;
+				jump(Active);
+			}	
+
+			
+		}
+
+		state Active
+		{
+			on SmartApp.TimerStart do countTimer;
+		}
+
+		void countTimer()
+		{
+			System.Random rnd = new System.Random();
+			int waitTime = rnd.Next(1*1000, 2*1000);
+			System.Threading.Thread.Sleep(waitTime);
+			send(this.smartApp, VirtualScheduler.End);
+		}
+	}
+}

@@ -1,0 +1,43 @@
+﻿using System.Diagnostics;
+
+namespace RainApp 
+{
+	internal machine SmartThingsPlatform
+	{
+		machine smartApp;
+
+		internal event Config(appID: machine);
+		internal event IsStorm;
+		internal event IsnotStorm;
+
+		start state Init
+		{
+			entry
+			{
+				smartApp = (trigger as Config).appID;
+				jump(Active);
+
+			}
+		}
+
+		state Active
+		{
+			on SmartApp.RequestWeather do replyWeather;
+		}
+
+		void replyWeather()
+		{
+			System.Random r = new System.Random();
+			int rnd = r.Next(0, 2);
+			bool flag = (rnd == 0);
+
+			if (flag) {
+				send(this.smartApp, IsStorm);
+			} else {
+				send(this.smartApp, IsnotStorm);
+			}
+
+		}
+	}
+
+}
